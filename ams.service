@@ -1,0 +1,19 @@
+[Unit]
+Description=reader-bridge
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/ams-projects/reader_bridge
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+KillMode=control-group
+User=pi
+Group=pi
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=reader-bridge
+
+[Install]
+WantedBy=multi-user.target
+
