@@ -3,7 +3,6 @@
 from enum import Enum
 import json
 import nfc
-import sys
 import urllib.request as ur
 
 API_ENDPOINT = 'http://localhost:8000/room'
@@ -12,12 +11,31 @@ PASORI_S380_PATH = 'usb:054c:06c3'
 
 
 class Status(Enum):
+    """状態を格納するenum
+
+    メンバーは文字列
+    SUCCESS : カードから番号が読み取れた
+    ERROR   : カードとの通信時に何らかのエラーが発生した
+    FATAL   : プロセスを終了する程度の深刻なエラー
+
+    """
     SUCCESS = "success"  # successfully read
-    ERROR   = "error"    # failed to read 
+    ERROR   = "error"    # failed to read
     FATAL   = "fatal"    # process will die
 
 
-def send_status(status, user_id = None):
+def send_status(status, user_id=None):
+    """バックエンドサーバーにリクエストを投げる
+
+    Parameters
+    ----------
+        status : Status
+            カードの読み取り成功/失敗を表すenum
+        user_id : int, optional
+            カードから読み取った番号
+            読み取りに失敗していた場合はNoneが設定される
+
+    """
     data = json.dumps({
         'status': str(status),
         'user_id': user_id
@@ -32,15 +50,15 @@ def send_status(status, user_id = None):
         headers=headers, method='POST')
 
     try:
-        with ur.urlopen(req) as res:
+        with ur.urlopen(req):
             pass
     except Exception as e:
         print('\033[01;33m[!]\033[0m {}\n'.format(e))
 
 
-
 def run():
-    """メインルーチン
+    """
+    メインルーチン
     これがずっと回る
 
     """
@@ -58,14 +76,23 @@ def run():
 
 def on_connect(tag):
     """This function is called when a remote tag has been activated.
-        カードにアクセスできた後の処理はこの関数を起点にして行う
+
+    カードにアクセスできた後の処理はこの関数を起点にして行う
+
+    エラー処理に関して
+    cf. https://github.com/nfcpy/nfcpy/blob/master/src/nfc/tag/__init__.py
+    0x01A6 => "invalid service code number or attribute"
+    0x0(nfc.tag.TIMEOUT_ERROR) => "unrecoverable timeout error"
 
     Parameters
     ----------
-        tag : nfc.tag.Tag
+    tag : nfc.tag.Tag
+        NFCカード
 
     Returns
     -------
+    bool
+        成功/失敗
 
     """
     print('\033[01;32m[*]\033[0m Card touched.')
@@ -76,13 +103,7 @@ def on_connect(tag):
 
     except nfc.tag.TagCommandError as e:
         send_status(Status.ERROR)
-        
 
-        """
-        cf. https://github.com/nfcpy/nfcpy/blob/master/src/nfc/tag/__init__.py
-        0x01A6 => "invalid service code number or attribute"
-        0x0(nfc.tag.TIMEOUT_ERROR) => "unrecoverable timeout error"
-        """
         if e.errno == 0x1A6:
             print('\033[01;33m[!]\033[0m \
 Your IC card seems to be unavailable. Is it valid one?\n')
