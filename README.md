@@ -1,4 +1,4 @@
-# reader-bridge
+# rdr-bridge
 
 カードリーダーから学籍番号を読んでエンドポイントへ送る。
 
@@ -20,3 +20,21 @@ pip3 install -r requirement.txt
 
 止めるときはCTRL+C。
 
+# エンドポイントへ送るJSON
+
+```json5
+{
+  // Example
+  "status": "success", // status: string ("success" | "error" | "fatal")
+  "user_id": 1         // user_id: number | null (is null iff status is not "success")
+}
+```
+
+
+```json5
+{
+  // Another example
+  "status": "error",
+  "user_id": null
+}
+```
