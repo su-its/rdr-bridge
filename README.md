@@ -20,13 +20,13 @@ pip3 install -r requirement.txt
 
 止めるときはCTRL+C。
 
-# エンドポイントへ送るJSON
+## エンドポイントへ送るJSON
 
 ```json5
 {
   // Example
   "status": "success", // status: string ("success" | "error" | "fatal")
-  "user_id": 1         // user_id: number | null (is null iff status is not "success")
+  "user_id": 1         // user_id: number | null (is null if status is not "success")
 }
 ```
 
