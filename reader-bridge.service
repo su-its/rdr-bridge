@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/home/pi/ams-projects/reader_bridge
+ExecStart=/home/pi/ams-projects/rdr-bridge/main.py
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 KillMode=control-group
@@ -16,4 +16,3 @@ SyslogIdentifier=reader-bridge
 
 [Install]
 WantedBy=multi-user.target
-

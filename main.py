@@ -5,7 +5,7 @@ import json
 import nfc
 import urllib.request as ur
 
-API_ENDPOINT = 'http://localhost:8000/room'
+API_ENDPOINT = 'http://localhost:3000/v1/room'
 
 PASORI_S380_PATH = 'usb:054c:06c3'
 
@@ -19,9 +19,9 @@ class Status(Enum):
     FATAL   : プロセスを終了する程度の深刻なエラー
 
     """
-    SUCCESS = "success"  # successfully read
-    ERROR   = "error"    # failed to read
-    FATAL   = "fatal"    # process will die
+    SUCCESS = 'success'  # successfully read
+    ERROR   = 'error'    # failed to read
+    FATAL   = 'fatal'    # process will die
 
 
 def send_status(status, user_id=None):
@@ -37,7 +37,7 @@ def send_status(status, user_id=None):
 
     """
     data = json.dumps({
-        'status': str(status),
+        'status': status.value,
         'user_id': user_id
     }).encode('utf-8')
 
@@ -121,6 +121,6 @@ Too short. Please touch your card again\n')
     return True
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     print('\033[01;32m[*]\033[0m Hello!')
     run()
