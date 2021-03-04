@@ -1,5 +1,5 @@
 [Unit]
-Description=reader-bridge
+Description=Bridge between ams-backend and a card reader
 After=network.target
 
 [Service]
@@ -12,7 +12,7 @@ User=pi
 Group=pi
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=reader-bridge
+SyslogIdentifier=rdr-bridge
 
 [Install]
 WantedBy=multi-user.target
