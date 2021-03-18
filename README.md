@@ -1,40 +1,41 @@
 # rdr-bridge
 
-カードリーダーから学籍番号を読んでエンドポイントへ送る。
+## 仕様
 
-## 必要機材
+- カードリーダーから学籍番号を読んでエンドポイントへ送る。
 
-Sonyのカードリーダー `PaSoRi SC-360/P`が必要。
+## 開発について
 
-## 使い方
+[詳細はこちら](CONTRIBUTING.md)
 
-必要なモジュールがインストールされていない場合は以下の通りインストール。
+## 本リポジトリの図的イメージ
 
-```shell
-pip3 install -r requirement.txt
-```
+本リポジトリはこのような立ち位置になっています。
 
-```shell
-./main.py
-```
+![APIの立ち位置](docs/PJ_map/AMS_MAP.png)
 
-止めるときはCTRL+C。
+---
 
-## エンドポイントへ送るJSON
+## 関係のあるリポジトリ一覧
 
-```json5
-{
-  // Example
-  "status": "success", // status: string ("success" | "error" | "fatal")
-  "user_id": 1         // user_id: number | null (is null iff status is not "success")
-}
-```
+## 議論したり、作業の優先順位を付けるリポジトリ
 
+[ams-project](https://github.com/su-its/ams-project)
 
-```json5
-{
-  // Another example
-  "status": "error",
-  "user_id": null
-}
-```
+---
+
+## バックエンド部
+
+[AMS_バックエンド](https://github.com/su-its/ams-backend-nodejs)
+
+---
+
+## フロントエンド部
+
+[AMS_フロントエンド](https://github.com/su-its/ams-frontend)
+
+---
+
+## レスポンスを受け取るリポジトリ
+
+[bou_responder](https://github.com/su-its/bou-responder)
