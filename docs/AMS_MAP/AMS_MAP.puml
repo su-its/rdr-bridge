@@ -5,38 +5,31 @@ skinparam DefaultFontSize 22
 skinparam ArrowFontSize 18
 skinparam NoteFontSize 13
 
-caption システム全体図
+caption ams-system
 
-node ITS室{
-    node カードタッチからDBまで {
-        file カードリーダー部{
-            interface 学生証
-            [カードリーダー]
-            [ブリッジ] #YellowGreen
-            note left: 本リポジトリは\nここになります
-        }
-        node バックエンド {
-            [AMS_バックエンド] #Aqua
-            database MariaDB
-            card Speaker
-        }
+node カードタッチからDBまで {
+    file カードリーダー部{
+        interface 学生証
+        [カードリーダー]
+        [ブリッジ] #YellowGreen
+        note left: 本リポジトリは\nここになります
     }
-
-    node フロントエンド {
-        [AMS_フロントエンド] #plum
-        storage bou_responder #Thistle
-        interface http
+    node バックエンド {
+        [AMS_バックエンド] #Aqua
+        card Speaker
+        database MariaDB
     }
 }
-cloud インターネット {
-    [ITS_Slack]
-    queue bou_relay
+
+
+node フロントエンド {
+    [AMS_フロントエンド] #plum
+    interface http
 }
 
 ' レイアウト調整
-ITS室 -[hidden]right-> インターネット
-MariaDB -[hidden]left-> Speaker
-[ITS_Slack] -[hidden]up-> bou_relay
+[AMS_バックエンド] -[hidden]right-> [AMS_フロントエンド]
+カードタッチからDBまで -[hidden]up-> フロントエンド
 
 ' カードリーダー&バックエンド部
 学生証 =^ [カードリーダー]: データ
@@ -46,13 +39,7 @@ MariaDB -[hidden]left-> Speaker
 [AMS_バックエンド] --^ Speaker: 通知音
 
 ' フロンドエンド部
-[AMS_バックエンド] ^=[#blue]=^ [AMS_フロントエンド]: JSON
-[AMS_バックエンド] ^-[#green]-^ [bou_responder]: JSONまたは、アノテーション
+[AMS_バックエンド] ^=[#blue]=^ [AMS_フロントエンド]: \n
 [AMS_フロントエンド] ^=[#blue]=^ http : リクエスト
-
-' インターネット部
-[bou_responder] -[#green]-^ [ITS_Slack]: 通知
-[ITS_Slack] -[#green]-^ [bou_relay]: イベント
-[bou_relay] -[#green]-^ [bou_responder]: イベント
 
 @enduml
