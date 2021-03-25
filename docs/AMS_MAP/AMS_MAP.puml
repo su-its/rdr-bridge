@@ -1,0 +1,45 @@
+@startuml AMS_MAP
+
+skinparam DefaultFontName メイリオ
+skinparam DefaultFontSize 22
+skinparam ArrowFontSize 18
+skinparam NoteFontSize 13
+
+caption ams-system
+
+node カードタッチからDBまで {
+    file カードリーダー部{
+        interface 学生証
+        [カードリーダー]
+        [ブリッジ] #YellowGreen
+        note left: 本リポジトリは\nここになります
+    }
+    node バックエンド {
+        [AMS_バックエンド] #Aqua
+        card Speaker
+        database MariaDB
+    }
+}
+
+
+node フロントエンド {
+    [AMS_フロントエンド] #plum
+    interface http
+}
+
+' レイアウト調整
+[AMS_バックエンド] -[hidden]right-> [AMS_フロントエンド]
+カードタッチからDBまで -[hidden]up-> フロントエンド
+
+' カードリーダー&バックエンド部
+学生証 =^ [カードリーダー]: データ
+[カードリーダー] ==^ [ブリッジ]: データ
+[ブリッジ] ==^ [AMS_バックエンド]: JSON
+[AMS_バックエンド] ^==^ MariaDB: SQL
+[AMS_バックエンド] --^ Speaker: 通知音
+
+' フロンドエンド部
+[AMS_バックエンド] ^=[#blue]=^ [AMS_フロントエンド]: \n
+[AMS_フロントエンド] ^=[#blue]=^ http : リクエスト
+
+@enduml
