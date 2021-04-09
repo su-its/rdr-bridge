@@ -1,10 +1,11 @@
 #! /usr/bin/env python3
 
-from enum import Enum
 import json
 import math
-import nfc
 import urllib.request as ur
+from enum import Enum
+
+import nfc
 
 API_ENDPOINT = 'http://localhost:3000/v1/room'
 
