@@ -2,6 +2,7 @@
 
 from enum import Enum
 import json
+import math
 import nfc
 import urllib.request as ur
 
@@ -115,8 +116,11 @@ Too short. Please touch your card again\n')
         return False
 
     user_id = int(block_data[1:9].decode('utf-8'))
-
-    send_status(Status.SUCCESS, user_id)
+    """読み取ったuser_idの桁数を確認する(8桁なら正しい)"""
+    if math.log10(user_id) + 1 == 8:
+        send_status(Status.SUCCESS, user_id)
+    else:
+        send_status(Status.ERROR)
 
     return True
 
