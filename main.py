@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 
-from enum import Enum
 import json
-import nfc
 import urllib.request as ur
+from enum import Enum
+
+import nfc
 
 API_ENDPOINT = 'http://localhost:3000/v1/room'
 
@@ -114,9 +115,14 @@ Too short. Please touch your card again\n')
             print('\033[01;33m[!]\033[0m {}\n'.format(e))
         return False
 
-    user_id = int(block_data[1:9].decode('utf-8'))
-
-    send_status(Status.SUCCESS, user_id)
+    user_id_str = block_data[1:9].decode('utf-8') # bytearrayなのでdecode()を呼べる
+    # 読み取ったuser_idの桁数を確認する(8桁なら正しい)
+    if len(user_id_str) == 8:
+        user_id = int(user_id_str)
+        send_status(Status.SUCCESS, user_id)
+    else:
+        print('[!] ID length was incorrect. ID: {}'.format(user_id_str))
+        send_status(Status.ERROR)
 
     return True
 
